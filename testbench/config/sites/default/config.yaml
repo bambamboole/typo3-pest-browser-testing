@@ -1,0 +1,10 @@
+base: 'http://testbench.test'
+rootPageId: 1
+websiteTitle: Testbench
+languages:
+  -
+    title: English
+    enabled: '1'
+    locale: en-US
+    base: /
+    languageId: 0

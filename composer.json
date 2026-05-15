@@ -1,0 +1,54 @@
+{
+    "name": "bambamboole/typo3-testing",
+    "description": "Pest browser testing for TYPO3 — in-process via amphp, with shared Doctrine transactions across the test runner and HTTP request handler.",
+    "type": "typo3-cms-extension",
+    "license": "MIT",
+    "keywords": ["typo3", "testing", "pest", "browser", "amphp", "playwright"],
+    "authors": [
+        {
+            "name": "Manuel Christlieb",
+            "email": "manuel@christlieb.eu"
+        }
+    ],
+    "require": {
+        "php": "^8.3",
+        "ext-pcntl": "*",
+        "typo3/cms-core": "^14.3",
+        "pestphp/pest": "^4.7",
+        "pestphp/pest-plugin-browser": "^4.3",
+        "amphp/http-server": "^3.0",
+        "nyholm/psr7": "^1.8"
+    },
+    "require-dev": {
+        "typo3/cms-backend": "^14.3",
+        "typo3/cms-extbase": "^14.3",
+        "typo3/cms-fluid": "^14.3",
+        "typo3/cms-frontend": "^14.3",
+        "typo3/cms-impexp": "^14.3",
+        "typo3/cms-install": "^14.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Bambamboole\\Typo3Testing\\": "src/"
+        },
+        "exclude-from-classmap": ["stubs/"]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Bambamboole\\Typo3Testing\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "typo3_testing"
+        }
+    },
+    "minimum-stability": "stable",
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "typo3/class-alias-loader": true,
+            "typo3/cms-composer-installers": true
+        }
+    }
+}

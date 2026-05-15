@@ -1,0 +1,19 @@
+/vendor
+/composer.lock
+/.phpunit.cache
+/.idea
+/.vscode
+/node_modules
+/var
+
+# TYPO3 asset publish at the consumer/host root — not part of the package.
+/public
+
+# Testbench is a TYPO3 instance; everything below it is generated at test
+# boot. Only the committed config/, public/index.php, and .gitignore stay.
+/testbench/vendor
+/testbench/var
+/testbench/public/_assets
+/testbench/public/_assets_install
+/testbench/public/fileadmin
+/testbench/public/typo3temp

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="vendor/autoload.php"
+         colors="true"
+         executionOrder="random"
+         failOnWarning="true">
+    <testsuites>
+        <testsuite name="unit">
+            <directory suffix="Test.php">./tests/Unit</directory>
+        </testsuite>
+        <testsuite name="feature">
+            <directory suffix="Test.php">./tests/Feature</directory>
+        </testsuite>
+        <testsuite name="browser">
+            <directory suffix="Test.php">./tests/Browser</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="TYPO3_CONTEXT" value="Testing"/>
+
+        <!-- DB driver: 'mysql' or 'sqlite' (in-memory). -->
+        <env name="DB_DRIVER" value="sqlite" force="false"/>
+
+        <!-- MySQL test DB (used when DB_DRIVER=mysql). -->
+        <env name="DB_HOST" value="127.0.0.1" force="false"/>
+        <env name="DB_PORT" value="3306" force="false"/>
+        <env name="DB_NAME" value="typo3_test" force="false"/>
+        <env name="DB_USER" value="root" force="false"/>
+        <env name="DB_PASSWORD" value="" force="false"/>
+
+        <!-- SQLite path (used when DB_DRIVER=sqlite). :memory: is fastest. -->
+        <env name="DB_PATH" value=":memory:" force="false"/>
+
+        <!-- REQUIRED. Must match the host in config/sites/<id>/config.yaml. -->
+        <env name="BASE_DOMAIN" value="example.test" force="false"/>
+    </php>
+</phpunit>
