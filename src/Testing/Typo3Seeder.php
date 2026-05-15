@@ -5,26 +5,10 @@ namespace Bambamboole\Typo3Testing\Testing;
 
 use TYPO3\CMS\Core\Database\Connection;
 
-/**
- * Programmatic test data seeding. Factory-style helpers your test class can
- * call from its `seed()` override (run once per class, before the first
- * transaction).
- *
- * `seedPage()` / `seedContent()` write through the shared TYPO3 Connection
- * so the in-process HTTP request handler sees the same rows.
- *
- * To create a site root, pass `is_siteroot => 1` plus the explicit `uid` you
- * referenced from `config/sites/<id>/config.yaml`'s rootPageId:
- *
- *     Typo3Seeder::seedPage(0, 'Site', ['uid' => 1, 'is_siteroot' => 1, 'slug' => '/']);
- */
+/** Factory inserts for pages and tt_content over the shared Connection. */
 final class Typo3Seeder
 {
-    /**
-     * Insert a page record. Returns the new uid.
-     *
-     * @param array<string, mixed> $extras
-     */
+    /** @param array<string, mixed> $extras */
     public static function seedPage(int $pid, string $title, array $extras = []): int
     {
         $conn = DatabaseManager::connection();
@@ -37,11 +21,7 @@ final class Typo3Seeder
         ], $extras));
     }
 
-    /**
-     * Insert a tt_content row. Returns the new uid.
-     *
-     * @param array<string, mixed> $extras
-     */
+    /** @param array<string, mixed> $extras */
     public static function seedContent(int $pid, string $header, ?string $bodytext = null, array $extras = []): int
     {
         $conn = DatabaseManager::connection();

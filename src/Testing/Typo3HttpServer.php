@@ -47,7 +47,6 @@ final class Typo3HttpServer implements HttpServer
 
     public function bootstrap(): void
     {
-        // Container + resetter are already wired in the constructor.
     }
 
     public function start(): void
@@ -114,7 +113,6 @@ final class Typo3HttpServer implements HttpServer
         $query = $req->getUri()->getQuery();
         $uri = $this->baselineUrl . $path . ($query !== '' ? '?' . $query : '');
 
-        // Serve static assets directly out of public/ before dispatching to TYPO3.
         $staticResponse = $this->staticFiles->tryServe($path);
         if ($staticResponse !== null) {
             return $staticResponse;

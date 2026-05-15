@@ -10,25 +10,14 @@ use TYPO3\CMS\Impexp\Exception\ImportFailedException;
 use TYPO3\CMS\Impexp\Import;
 
 /**
- * Loads a TYPO3 ImpExp fixture (.t3d / .xml exported via
- * `vendor/bin/typo3 impexp:export`) into the current Doctrine connection.
- *
- * Use this as the "escape hatch" when the programmatic Typo3Seeder isn't
- * enough — typically for frontend rendering tests that need real page
- * content, site configuration, and content-element relations.
- *
- * Imports are cached per fixture file path per process, so repeated calls
- * from the same test class are no-ops.
+ * Loads a TYPO3 ImpExp `.t3d`/`.xml` export into the shared connection.
+ * Cached per fixture path per process; truncate hooks must call forgetAll().
  */
 final class Typo3ImpExpFixture
 {
     /** @var array<string, bool> */
     private static array $imported = [];
 
-    /**
-     * Invalidate the per-path cache. Call from teardown / truncate hooks so the
-     * next seed() actually re-runs the import after the DB has been wiped.
-     */
     public static function forgetAll(): void
     {
         self::$imported = [];
@@ -112,9 +101,6 @@ final class Typo3ImpExpFixture
         $GLOBALS['BE_USER'] = $beUser;
     }
 
-    /**
-     * Path inside the consumer's project (typically `tests/fixtures/...`).
-     */
     public static function projectFixture(string $relativePath): string
     {
         return TestingPaths::projectRoot() . '/' . ltrim($relativePath, '/');

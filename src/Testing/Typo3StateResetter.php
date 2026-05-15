@@ -15,11 +15,9 @@ final class Typo3StateResetter
 
     public function reset(): void
     {
-        // Per-request superglobals reset to the process baseline.
         $_GET = $_POST = $_COOKIE = $_REQUEST = $_FILES = [];
         $_SERVER = $this->baselineServer;
 
-        // Frontend, backend, and language globals.
         // $GLOBALS['LANG'] is deliberately NOT unset here: once any earlier
         // request loaded cms-backend's JavaScript modules (e.g. after a
         // login), the import map still emits VIRTUAL:labels/ entries on

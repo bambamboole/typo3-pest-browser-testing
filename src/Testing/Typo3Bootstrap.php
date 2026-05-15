@@ -43,7 +43,6 @@ final class Typo3Bootstrap
 
     public static function env(string $key, string $default = ''): string
     {
-        // Read from PHP env: phpunit.xml <env>, CLI overrides, IDE run configs.
         $fromEnv = getenv($key);
         if ($fromEnv !== false && $fromEnv !== '') {
             return $fromEnv;

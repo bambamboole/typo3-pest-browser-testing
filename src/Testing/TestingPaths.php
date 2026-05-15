@@ -8,23 +8,16 @@ use Composer\InstalledVersions;
 use ReflectionClass;
 use RuntimeException;
 
-/**
- * Resolves filesystem paths the test harness needs at boot, before TYPO3's
- * own Environment::getProjectPath() is available.
- *
- * The consumer's project root is the directory that owns the root composer.json
- * (containing this package as a require / require-dev dependency). It is the
- * same directory TYPO3 will eventually use as its project path.
- */
 final class TestingPaths
 {
     private static ?string $projectRoot = null;
     private static ?string $packageRoot = null;
 
     /**
-     * Override with TYPO3_TESTING_PROJECT_ROOT for setups where autodetection
-     * fails (e.g. unusual symlink layouts, monorepos with non-standard
-     * vendor paths).
+     * The consumer's project root — the directory that owns the root
+     * composer.json. Override with TYPO3_TESTING_PROJECT_ROOT when
+     * autodetection fails (unusual symlink layouts, monorepos with
+     * non-standard vendor paths).
      */
     public static function projectRoot(): string
     {
@@ -51,10 +44,6 @@ final class TestingPaths
         return self::$projectRoot = dirname($file, 3);
     }
 
-    /**
-     * This package's own root (where its composer.json lives). Used to locate
-     * the bundled stubs/ directory and similar package-internal resources.
-     */
     public static function packageRoot(): string
     {
         return self::$packageRoot ??= dirname(__DIR__, 2);

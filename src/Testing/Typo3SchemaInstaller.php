@@ -8,11 +8,7 @@ use TYPO3\CMS\Core\Database\Schema\SchemaMigrator;
 use TYPO3\CMS\Core\Database\Schema\SqlReader;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- * Builds the full TYPO3 schema (every CREATE TABLE statement TYPO3 + installed
- * extensions know about) on the currently-active Doctrine connection. Used by
- * the SQLite mode where the in-memory DB starts empty on every test run.
- */
+/** Installs TYPO3's full CREATE TABLE schema on the shared connection. */
 final class Typo3SchemaInstaller
 {
     private static bool $installed = false;
@@ -46,10 +42,6 @@ final class Typo3SchemaInstaller
         self::$installed = true;
     }
 
-    /**
-     * Empties every TYPO3 table on the shared connection. Run after schema
-     * install so tests start from a known-empty state regardless of driver.
-     */
     public static function truncateAllTables(): void
     {
         $conn = DatabaseManager::connection();
