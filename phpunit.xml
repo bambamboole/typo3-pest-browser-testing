@@ -10,5 +10,8 @@
         <testsuite name="integration">
             <directory suffix="Test.php">./tests/Integration</directory>
         </testsuite>
+        <testsuite name="browser">
+            <directory suffix="Test.php">./tests/Browser</directory>
+        </testsuite>
     </testsuites>
 </phpunit>

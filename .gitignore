@@ -4,7 +4,9 @@
 /.idea
 /.vscode
 /node_modules
+/package-lock.json
 /var
+/tests/Browser/Screenshots
 
 # TYPO3 asset publish at the consumer/host root — not part of the package.
 /public

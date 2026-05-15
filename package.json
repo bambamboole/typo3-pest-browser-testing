@@ -1,0 +1,8 @@
+{
+    "name": "bambamboole-typo3-testing",
+    "private": true,
+    "description": "Node-side dependencies for browser tests: pest-plugin-browser spawns playwright run-server from this project's node_modules. Browser binaries are cached globally per OS user.",
+    "dependencies": {
+        "playwright": "^1.59.1"
+    }
+}
