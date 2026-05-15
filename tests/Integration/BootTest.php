@@ -2,8 +2,11 @@
 declare(strict_types=1);
 
 use Bambamboole\Typo3Testing\Testing\Typo3Bootstrap;
+use Bambamboole\Typo3Testing\Tests\Bootstrap;
 use Psr\Container\ContainerInterface;
 use TYPO3\CMS\Core\Http\Application;
+
+beforeAll(fn() => Bootstrap::ensure());
 
 it('boots TYPO3 against the testbench project root', function () {
     $container = Typo3Bootstrap::ensureBooted(

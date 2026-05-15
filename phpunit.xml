@@ -14,4 +14,9 @@
             <directory suffix="Test.php">./tests/Browser</directory>
         </testsuite>
     </testsuites>
+    <php>
+        <env name="DB_DRIVER" value="sqlite" force="false"/>
+        <env name="DB_PATH" value=":memory:" force="false"/>
+        <env name="BASE_DOMAIN" value="testbench.test" force="false"/>
+    </php>
 </phpunit>
