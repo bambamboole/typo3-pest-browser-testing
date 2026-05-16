@@ -15,7 +15,7 @@
         "ext-pcntl": "*",
         "typo3/cms-core": "^14.3",
         "pestphp/pest": "^4.7",
-        "pestphp/pest-plugin-browser": "^4.3",
+        "bambamboole/extended-pest-plugin-browser": "^4.0",
         "amphp/http-server": "^3.0",
         "nyholm/psr7": "^1.8"
     },

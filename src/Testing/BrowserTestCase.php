@@ -4,17 +4,12 @@ declare(strict_types=1);
 namespace Bambamboole\Typo3Testing\Testing;
 
 use Pest\Browser\Api\AwaitableWebpage;
+use Pest\Browser\Api\PendingAwaitablePage;
 use Pest\Browser\Browsable;
-use Pest\Browser\Enums\Device;
-use Pest\Browser\Playwright\Client;
-use Pest\Browser\Playwright\Context;
-use Pest\Browser\Playwright\InitScript;
-use Pest\Browser\Playwright\Playwright;
 use Pest\Browser\ServerManager;
 use Pest\Browser\Support\ComputeUrl;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use ReflectionProperty;
 
 class BrowserTestCase extends TestCase
 {
@@ -39,11 +34,9 @@ class BrowserTestCase extends TestCase
             self::$server->start();
 
             // Pest's ServerManager hardcodes Laravel detection via function_exists('app_path')
-            // and otherwise falls back to NullableHttpServer. We inject our driver by
-            // overwriting the private $http property.
-            $manager = ServerManager::instance();
-            $prop = new ReflectionProperty(ServerManager::class, 'http');
-            $prop->setValue($manager, self::$server);
+            // and otherwise falls back to NullableHttpServer. The fork exposes setHttp() so
+            // we can register our TYPO3-backed driver instead.
+            ServerManager::instance()->setHttp(self::$server);
 
             register_shutdown_function(static function (): void {
                 self::$server?->stop();
@@ -96,56 +89,25 @@ class BrowserTestCase extends TestCase
      * UserSessionManager, then hands the resulting JWT to Playwright as an
      * HttpOnly cookie before navigating.
      *
-     * pest-plugin-browser's PendingAwaitablePage is final and its public API
-     * has no cookie hook, so we replicate buildAwaitablePage() locally and
-     * reflect into Pest's private Context::$guid to call Playwright's
-     * Browser.Context.addCookies directly. Same pattern as the
-     * ServerManager::$http injection in setUpBeforeClass().
+     * The same-origin Referer is required so TYPO3's ReferrerEnforcer treats
+     * the request as SAME_ORIGIN and skips the "referrer-refresh" shim it
+     * would otherwise emit for first-hit backend navigations. Without it,
+     * goto() returns on the tiny JS-driven shim page that races the assertion.
      */
     protected function visitAsAdmin(
         string $path = '/typo3/',
         string $username = 'testadmin',
         string $password = 'testadmin-password',
-    ): AwaitableWebpage {
+    ): PendingAwaitablePage {
         $uid = BackendUserSeeder::ensureTestAdmin($username, $password);
         $jwt = BackendSessionForge::forUser($uid);
-
-        $browser = Playwright::browser(Playwright::defaultBrowserType())->launch();
-        $context = $browser->newContext([
-            'locale'      => 'en-US',
-            'timezoneId'  => 'UTC',
-            'colorScheme' => Playwright::defaultColorScheme()->value,
-            ...Device::DESKTOP->context(),
-        ]);
-        $context->addInitScript(InitScript::get());
-
         $url = ComputeUrl::from($path);
-        $host = parse_url($url, PHP_URL_HOST) ?: '127.0.0.1';
 
-        $guid = (new ReflectionProperty(Context::class, 'guid'))->getValue($context);
-        $response = Client::instance()->execute($guid, 'addCookies', [
-            'cookies' => [[
-                'name'     => 'be_typo_user',
-                'value'    => $jwt,
-                'domain'   => $host,
-                'path'     => '/',
+        return $this->visit($path, ['referer' => $url])
+            ->withCookie('be_typo_user', $jwt, [
                 'httpOnly' => true,
                 'secure'   => false,
                 'sameSite' => 'Strict',
-            ]],
-        ]);
-        foreach ($response as $_) {
-            // Consume the Generator so the message round-trips with Playwright.
-        }
-
-        // Send a same-origin Referer so TYPO3's ReferrerEnforcer treats the
-        // request as SAME_ORIGIN and skips the "referrer-refresh" shim it
-        // would otherwise emit for first-hit backend navigations. Without
-        // this, goto() returns on the tiny shim page (a JS-driven redirect
-        // that races the assertion).
-        return new AwaitableWebpage(
-            $context->newPage()->goto($url, ['referer' => $url]),
-            $url,
-        );
+            ]);
     }
 }
