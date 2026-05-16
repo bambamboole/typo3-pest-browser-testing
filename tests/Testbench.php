@@ -10,7 +10,7 @@ use RuntimeException;
  * Helpers for booting TYPO3 against the package-local testbench fixture.
  *
  * The testbench is a minimal TYPO3 project (config/, public/) shipped in
- * `packages/typo3-testing/testbench/`. Booting it requires a Composer
+ * `packages/typo3-testing/workbench/`. Booting it requires a Composer
  * vendor/ at the same level — we don't commit one, so this class symlinks
  * an already-installed vendor/ in at runtime. Two layouts are supported:
  *
@@ -24,7 +24,7 @@ final class Testbench
 {
     public static function projectRoot(): string
     {
-        return TestingPaths::packageRoot() . '/testbench';
+        return TestingPaths::packageRoot() . '/workbench';
     }
 
     public static function ensureReady(): void
