@@ -71,31 +71,25 @@ vendor/bin/pest --testsuite=browser
 
 ## Using it while building a TYPO3 extension
 
-Extensions are their own repos and don't ship a TYPO3 install. The convention is a `.Build/` (or similarly named) directory inside your extension that hosts a minimal TYPO3 project, with your extension symlinked or path-required into its `vendor/`. The package treats that as the project root.
+Extensions are their own repos and don't ship a TYPO3 install. The convention is a `workbench/` directory inside the extension that holds the minimal TYPO3 instance the tests run against — `config/sites/`, `public/index.php`, and a `vendor/` symlinked back to the extension's own `vendor/`. Your `composer.json`, `phpunit.xml`, and `tests/` all stay at the extension root.
 
 ```
 my-extension/
 ├── Classes/
 ├── Configuration/
-├── Tests/
-├── composer.json
-└── .Build/                      ← TYPO3 testbench
-    ├── composer.json
+├── Tests/                       ← your tests live here
+├── composer.json                ← extension package, with typo3-testing in require-dev
+├── phpunit.xml                  ← stays at the package root
+└── workbench/                   ← prepared TYPO3 for tests to run against
     ├── config/sites/main/config.yaml
     ├── public/index.php
-    └── (composer install here)
+    └── vendor/                  (symlink to ../vendor)
 ```
 
 ```bash
-# Inside .Build/
 composer require --dev bambamboole/typo3-testing
 vendor/bin/typo3 testing:init
-```
-
-Then run tests from the extension root pointing at the testbench's `phpunit.xml`:
-
-```bash
-vendor/bin/pest -c .Build/phpunit.xml --testsuite=browser
+vendor/bin/pest --testsuite=browser
 ```
 
 Everything else — seeding, the `BrowserTestCase`, backend login helpers — is identical to the in-project case.
