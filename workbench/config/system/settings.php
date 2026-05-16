@@ -1,5 +1,4 @@
 <?php
-
 return [
     'BE' => [
         'debug' => false,
@@ -17,11 +16,22 @@ return [
             ],
         ],
     ],
+    'EXTENSIONS' => [
+        'backend' => [
+            'backendFavicon' => '',
+            'backendLogo' => '',
+            'loginBackgroundImage' => '',
+            'loginFootnote' => '',
+            'loginHighlightColor' => '',
+            'loginLogo' => '',
+            'loginLogoAlt' => '',
+        ],
+    ],
     'SYS' => [
+        'devIPmask' => '',
+        'displayErrors' => 0,
         'encryptionKey' => '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
         'sitename' => 'TYPO3 Testing Testbench',
-        'devIPmask' => '',
         'trustedHostsPattern' => '.*',
-        'displayErrors' => 0,
     ],
 ];
